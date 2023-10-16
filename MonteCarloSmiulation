@@ -1,0 +1,38 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Initial portfolio value and return statistics
+initial_investment = 10000  # Initial investment
+mean_return = 0.15  # Average annual stock return
+return_stddev = 0.18  # Standard deviation of annual stock return
+num_years = 10  # Number of years for the simulation
+
+# Monte Carlo simulation parameters
+num_simulations = 1000  # Number of simulations
+
+# Create an array to store investment returns for each simulation
+portfolio_values = np.zeros((num_simulations, num_years + 1))
+
+for i in range(num_simulations):
+    # Simulate returns for each year
+    annual_returns = np.random.normal(mean_return, return_stddev, num_years) + 1
+    
+    # Update portfolio value each year
+    portfolio_values[i][0] = initial_investment
+    for j in range(num_years):
+        portfolio_values[i][j + 1] = portfolio_values[i][j] * annual_returns[j]
+
+# Plot the final portfolio value for each simulation
+for i in range(num_simulations):
+    plt.plot(range(num_years + 1), portfolio_values[i])
+
+# Plot the average results
+mean_portfolio_values = np.mean(portfolio_values, axis=0)
+plt.plot(range(num_years + 1), mean_portfolio_values, 'k-', linewidth=3, label='Average')
+
+plt.title('Monte Carlo Simulation - Stock Portfolio')
+plt.xlabel('Year')
+plt.ylabel('Portfolio Value')
+plt.legend()
+plt.grid(True)
+plt.show()
